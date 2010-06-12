@@ -139,7 +139,7 @@ class AppForm extends Nette\Forms\Form implements ISignalReceiver
 			$this->fireEvents();
 			return;
 
-		} elseif (preg_match('~^validator(\d+)$~', $signal, $match)) {
+		} elseif ($match = Nette\String::match($signal, '~^validator(\d+)$~')) {
 			if (isset(Rule::$list[(int) $match[1]])) {
 				$rule = Rule::$list[(int) $match[1]];
 

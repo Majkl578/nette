@@ -178,15 +178,17 @@ final class InstantClientScript extends Nette\Object
 
 		//callback
 		case is_callable($operation) && $presenter = $this->form->getPresenter():
-			return "var q = new XMLHttpRequest()\n"
+			return "var q = (window.XMLHttpRequest ? new XMLHttpRequest() : (window.ActiveXObject ? new ActiveXObject('Microsoft.XMLHTTP') : false))\n"
+				. "if (q) {\n\t"
 				. "q.open('POST', '" . (new Nette\Application\Link(
 						$presenter,
 						$this->form->lookupPath('Nette\Application\Presenter') . Nette\Application\AppForm::NAME_SEPARATOR . 'validator' . $rule->index . '!',
 						array()
 					)) . "', false);\n\t"
-				. "q.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');\n"
-				. "q.send('value=' + escape(nette.getValue($elem)));\n"
-				. "res = eval('(' + q.responseText + ')')['isValid'];\n";
+				. "q.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');\n\t"
+				. "q.send('value=' + escape(nette.getValue($elem)));\n\t"
+				. "res = eval('(' + q.responseText + ')')['isValid'];\n"
+				. "} else { res = true; }";
 
 		case $operation === ':filled' && $control instanceof RadioList:
 			return "res = (val = nette.getValue($elem)) !== null;";
