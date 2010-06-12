@@ -140,20 +140,16 @@ class AppForm extends Nette\Forms\Form implements ISignalReceiver
 			return;
 
 		} elseif ($match = Nette\String::match($signal, '~^validator(\d+)$~')) {
-			if (isset(Rule::$list[(int) $match[1]])) {
-				$rule = Rule::$list[(int) $match[1]];
+			if (($rule = Rule::getRule((int) $match[1])) !== NULL && $rule->type === Rule::VALIDATOR) {
+				$cb = $rule->parent->getCallback($rule);
+				if ($cb->isCallable()) {
+					//set value for validation
+					$rule->control->setValue(Nette\Environment::getHttpRequest()->getPost('value'));
 
-				if ($rule->type === Rule::VALIDATOR) {
-					$cb = $rule->parent->getCallback($rule);
-					if ($cb->isCallable()) {
-						//set value for validation
-						$rule->control->setValue(Nette\Environment::getHttpRequest()->getPost('value'));
-
-						//taken from Rules::validate()
-						$this->getPresenter(true)->terminate(new JsonResponse(array(
-							'isValid' => $rule->isNegative xor $cb->invoke($rule->control, $rule->arg),
-						),'text/plain'));
-					}
+					//taken from Rules::validate()
+					$this->getPresenter(TRUE)->terminate(new JsonResponse(array(
+						'isValid' => $rule->isNegative xor $cb->invoke($rule->control, $rule->arg),
+					),'text/plain'));
 				}
 			}
 		}

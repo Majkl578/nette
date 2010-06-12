@@ -68,7 +68,7 @@ final class Rule extends Nette\Object
 	private static $globalIndex = 0;
 
 	/** @var array */
-	public static $list = array();
+	private static $list = array();
 
 	/** @var int */
 	private $index;
@@ -79,9 +79,22 @@ final class Rule extends Nette\Object
 		self::$list[$this->index] = $this;
 	}
 
+	/**
+	 * Get rule's index
+	 * @return int
+	 */
 	public function getIndex()
 	{
 		return $this->index;
 	}
 
+	/**
+	 * Get a rule by its id in Rule::$list
+	 * @param int $id
+	 * @return Rule
+	 */
+	public static function getRule($id)
+	{
+		return isset(self::$list[$id]) ? self::$list[$id] : NULL;
+	}
 }
