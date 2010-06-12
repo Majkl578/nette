@@ -63,6 +63,7 @@ final class Rules extends Nette\Object implements \IteratorAggregate
 	{
 		$rule = new Rule;
 		$rule->control = $this->control;
+		$rule->parent = $this;
 		$rule->operation = $operation;
 		$this->adjustOperation($rule);
 		$rule->arg = $arg;
@@ -107,6 +108,7 @@ final class Rules extends Nette\Object implements \IteratorAggregate
 	{
 		$rule = new Rule;
 		$rule->control = $control;
+		$rule->parent = $this;
 		$rule->operation = $operation;
 		$this->adjustOperation($rule);
 		$rule->arg = $arg;
@@ -236,7 +238,7 @@ final class Rules extends Nette\Object implements \IteratorAggregate
 
 
 
-	private function getCallback($rule)
+	public function getCallback($rule)
 	{
 		$op = $rule->operation;
 		if (is_string($op) && strncmp($op, ':', 1) === 0) {

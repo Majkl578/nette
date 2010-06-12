@@ -101,14 +101,12 @@ final class InstantClientScript extends Nette\Object
 	{
 		$res = '';
 		foreach ($rules as $rule) {
-			if (!is_string($rule->operation)) continue;
-
-			if (strcasecmp($rule->operation, 'Nette\\Forms\\InstantClientScript::javascript') === 0) {
+			if (is_string($rule->operation) && strcasecmp($rule->operation, 'Nette\\Forms\\InstantClientScript::javascript') === 0) {
 				$res .= "$rule->arg\n";
 				continue;
 			}
 
-			$script = $this->getClientScript($rule->control, $rule->operation, $rule->arg);
+			$script = $this->getClientScript($rule);
 			if (!$script) continue;
 
 			if (!empty($rule->message)) { // this is rule
@@ -164,14 +162,31 @@ final class InstantClientScript extends Nette\Object
 
 
 
-	private function getClientScript(IFormControl $control, $operation, $arg)
+	private function getClientScript(Rule $rule)
 	{
+		$control = $rule->control;
+		$operation = $rule->operation;
+		$arg = $rule->arg;
+
+		if (is_string($operation))
 		$operation = strtolower($operation);
 		$elem = 'form[' . json_encode($control->getHtmlName()) . ']';
 
 		switch (TRUE) {
 		case $control instanceof HiddenField || $control->isDisabled():
 			return NULL;
+
+		//callback
+		case is_callable($operation) && $presenter = $this->form->getPresenter():
+			return "var q = new XMLHttpRequest()\n"
+				. "q.open('POST', '" . (new Nette\Application\Link(
+						$presenter,
+						$this->form->lookupPath('Nette\Application\Presenter') . Nette\Application\AppForm::NAME_SEPARATOR . 'validator' . $rule->index . '!',
+						array()
+					)) . "', false);\n\t"
+				. "q.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');\n"
+				. "q.send('value=' + escape(nette.getValue($elem)));\n"
+				. "res = eval('(' + q.responseText + ')')['isValid'];\n";
 
 		case $operation === ':filled' && $control instanceof RadioList:
 			return "res = (val = nette.getValue($elem)) !== null;";

@@ -59,5 +59,29 @@ final class Rule extends Nette\Object
 
 	/** @var Rules (only for CONDITION type)  */
 	public $subRules;
+	
+	/****** single rule validation *****/
+	/** @var Rules */
+	public $parent;
+
+	/** @var int */
+	private static $globalIndex = 0;
+
+	/** @var array */
+	public static $list = array();
+
+	/** @var int */
+	private $index;
+
+	public function __construct()
+	{
+		$this->index = ++self::$globalIndex;
+		self::$list[$this->index] = $this;
+	}
+
+	public function getIndex()
+	{
+		return $this->index;
+	}
 
 }
