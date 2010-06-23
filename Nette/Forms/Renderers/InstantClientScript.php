@@ -141,7 +141,7 @@ final class InstantClientScript extends Nette\Object
 		$formName = json_encode((string) $this->form->getElementPrototype()->id);
 		foreach ($rules as $rule) {
 			if ($rule->type === Rule::CONDITION && is_string($rule->operation)) {
-				$script = $this->getClientScript($rule->control, $rule->operation, $rule->arg);
+				$script = $this->getClientScript($rule);
 				if ($script) {
 					$res = $this->getToggleScript($rule->subRules, $cond . "$script visible = visible && " . ($rule->isNegative ? '!' : '') . "res;\n");
 					if ($res) {
