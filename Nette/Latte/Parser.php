@@ -104,6 +104,10 @@ class Parser extends Nette\Object
 			if (!$matches) { // EOF
 				break;
 
+			} else if (!empty($matches['malformed'])) {
+				file_put_contents('/tmp/lattetest', $matches[0]);
+				throw new CompileException("Malformed macro declaration {{$matches['macro']}}.");
+
 			} elseif (!empty($matches['comment'])) { // {* *}
 				$this->addToken(Token::COMMENT, $matches[0]);
 
@@ -320,9 +324,18 @@ class Parser extends Nette\Object
 		$this->macroRe = '
 			(?P<comment>' . $left . '\\*.*?\\*' . $right . '\n{0,2})|
 			' . $left . '
-				(?P<macro>(?:' . self::RE_STRING . '|\{
-						(?P<inner>' . self::RE_STRING . '|\{(?P>inner)\}|[^\'"{}])*+
-				\}|[^\'"{}])+?)
+				(?P<macro>(?:' . self::RE_STRING . '|
+					\{(?P<inner>' . self::RE_STRING . '|
+					\{(?P>inner)\}|
+					[^\'"{}])*+\}|
+					[^\'"{}]|
+					(?P<malformed>
+						\'(?:\\\\.|[^\'\\\\])*|
+						(?:\\\\.|[^\'\\\\])*\'|
+						"(?:\\\\.|[^"\\\\])*|
+						(?:\\\\.|[^"\\\\])*"
+					)
+				)+?)
 			' . $right . '
 			(?P<rmargin>[ \t]*(?=\n))?
 		';
