@@ -344,11 +344,15 @@ abstract class PresenterComponent extends Nette\ComponentModel\Container impleme
 	public function isLinkCurrent($destination = NULL, $args = array())
 	{
 		if ($destination !== NULL) {
-			if (!is_array($args)) {
-				$args = func_get_args();
-				array_shift($args);
+			try {
+				if (!is_array($args)) {
+					$args = func_get_args();
+					array_shift($args);
+				}
+				$this->getPresenter()->createRequest($this, $destination, $args, 'test');
+			} catch (InvalidLinkException $e) { // request could not be created
+				return FALSE;
 			}
-			$this->getPresenter()->createRequest($this, $destination, $args, 'test');
 		}
 		return $this->getPresenter()->getLastCreatedRequestFlag('current');
 	}
