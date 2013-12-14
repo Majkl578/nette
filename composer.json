@@ -27,7 +27,7 @@
 		"ext-fileinfo": "*"
 	},
 	"require-dev": {
-		"nette/tester": "@dev"
+		"nette/tester": "dev-feature/hhvm-fixes"
 	},
 	"autoload": {
 		"classmap": ["Nette/"],
@@ -36,6 +36,12 @@
 	"extra": {
 		"branch-alias": {
 			"dev-master": "2.2-dev"
+		}
+	},
+	"repositories": {
+		"nette/tester": {
+			"type": "vcs",
+			"url": "git@github.com:Majkl578/nette-tester"
 		}
 	}
 }
