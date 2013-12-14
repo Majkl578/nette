@@ -141,7 +141,7 @@ class ObjectMixin
 			}
 
 		} elseif (isset($methods[$name])) { // public method as closure getter
-			if (PHP_VERSION_ID >= 50400) {
+			if (PHP_VERSION_ID >= 50400 && !Nette\Framework::isHhvm()) { // HHVM bug #1353 & #1242
 				$rm = new \ReflectionMethod($class, $name);
 				$val = $rm->getClosure($_this);
 			} else {
