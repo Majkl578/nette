@@ -14,6 +14,7 @@ fi
 # Default runner arguments
 jobsNum=20
 phpIni="$dir/php-unix.ini"
+binary=php
 
 # Command line arguments processing
 i=$#
@@ -34,14 +35,31 @@ while [ $i -gt 0 ]; do
 		fi
 		phpIni="$1"
 
+	elif [ "$1" = "-b" ]; then
+		shift && i=$(($i - 1))
+		if [ ! -z "$1" ]; then
+			binary="$1"
+		fi
+
 	else
 		set -- "$@" "$1"
 	fi
 	shift && i=$(($i - 1))
 done
 
+# Running under HHVM?
+if [ "`$binary --version | grep HipHop`" != "" ]; then
+	isHHVM=1
+else
+	isHHVM=0
+fi
+
 # Run tests with script's arguments, doubled -c option intentionally
-php -n -c "$phpIni" "$runnerScript" -j "$jobsNum" -c "$phpIni" "$@"
+if [ $isHHVM ]; then
+	$binary "$runnerScript" --hhvm -p $binary -j "$jobsNum" "$@"
+else
+	$binary -n -c "$phpIni" "$runnerScript" -j "$jobsNum" -c "$phpIni" "$@"
+fi
 error=$?
 
 # Print *.actual content if tests failed
