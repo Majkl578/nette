@@ -43,8 +43,8 @@ class Response extends Nette\Object implements IResponse
 	public function __construct()
 	{
 		if (PHP_VERSION_ID >= 50400) {
-			if (is_int(http_response_code())) {
-				$this->code = http_response_code();
+			if (is_int(@http_response_code())) {
+				$this->code = @http_response_code();
 			}
 			header_register_callback($this->removeDuplicateCookies);
 		}
