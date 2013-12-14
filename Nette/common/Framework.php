@@ -33,4 +33,13 @@ class Framework
 		throw new StaticClassException;
 	}
 
+	/**
+	 * @internal
+	 * @return bool
+	 */
+	public static function isHhvm()
+	{
+		return strpos(PHP_VERSION, 'hiphop') !== FALSE;
+	}
+
 }
