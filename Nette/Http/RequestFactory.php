@@ -217,7 +217,7 @@ class RequestFactory extends Nette\Object
 
 		// HEADERS
 		if (function_exists('apache_request_headers')) {
-			$headers = array_change_key_case(apache_request_headers(), CASE_LOWER);
+			$headers = array_change_key_case((array) apache_request_headers(), CASE_LOWER);
 		} else {
 			$headers = array();
 			foreach ($_SERVER as $k => $v) {
