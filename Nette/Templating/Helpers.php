@@ -309,8 +309,7 @@ class Helpers
 	 */
 	public static function nl2br($value)
 	{
-		if (Nette\Framework::isHhvm()) {
-			// HHVM bug #1351
+		if (defined('HHVM_VERSION')) { // HHVM bug #1351
 			return Strings::replace($value, "~(\r?\n)~", Html::$xhtml ? '<br />\1' : '<br>\1');
 		}
 
