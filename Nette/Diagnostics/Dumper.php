@@ -77,9 +77,9 @@ class Dumper
 		);
 		list($file, $line, $code) = $options[self::LOCATION] ? self::findLocation() : NULL;
 		return '<pre class="nette-dump"'
-			. ($file ? ' title="' . htmlspecialchars("$code\nin file $file on line $line", ENT_IGNORE | ENT_QUOTES) . '">' : '>')
+			. ($file ? ' title="' . htmlspecialchars("$code\nin file $file on line $line", (defined('ENT_IGNORE') ? ENT_IGNORE : 0) | ENT_QUOTES) . '">' : '>')
 			. self::dumpVar($var, $options)
-			. ($file ? '<small>in <a href="editor://open/?file=' . rawurlencode($file) . "&amp;line=$line\">" . htmlspecialchars($file, ENT_IGNORE) . ":$line</a></small>" : '')
+			. ($file ? '<small>in <a href="editor://open/?file=' . rawurlencode($file) . "&amp;line=$line\">" . htmlspecialchars($file, defined('ENT_IGNORE') ? ENT_IGNORE : 0) . ":$line</a></small>" : '')
 			. "</pre>\n";
 	}
 

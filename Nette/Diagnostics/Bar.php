@@ -70,7 +70,7 @@ class Bar extends Nette\Object
 				$panels[] = array(
 					'id' => "error-" . preg_replace('#[^a-z0-9]+#i', '-', $id),
 					'tab' => "Error in $id",
-					'panel' => '<h1>Error: ' . $id . '</h1><div class="nette-inner">' . nl2br(htmlSpecialChars($e, ENT_IGNORE)) . '</div>',
+					'panel' => '<h1>Error: ' . $id . '</h1><div class="nette-inner">' . nl2br(htmlSpecialChars($e, defined('ENT_IGNORE') ? ENT_IGNORE : 0)) . '</div>',
 				);
 				while (ob_get_level() > $obLevel) { // restore ob-level if broken
 					ob_end_clean();

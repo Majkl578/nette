@@ -33,7 +33,7 @@ class Helpers
 			return Nette\Utils\Html::el('a')
 				->href(strtr(Debugger::$editor, array('%file' => rawurlencode($file), '%line' => $line)))
 				->title("$file:$line")
-				->setHtml(htmlSpecialChars(rtrim($dir, DIRECTORY_SEPARATOR), ENT_IGNORE) . DIRECTORY_SEPARATOR . '<b>' . htmlSpecialChars(basename($file), ENT_IGNORE) . '</b>' . ($line ? ":$line" : ''));
+				->setHtml(htmlSpecialChars(rtrim($dir, DIRECTORY_SEPARATOR), defined('ENT_IGNORE') ? ENT_IGNORE : 0) . DIRECTORY_SEPARATOR . '<b>' . htmlSpecialChars(basename($file), defined('ENT_IGNORE') ? ENT_IGNORE : 0) . '</b>' . ($line ? ":$line" : ''));
 		} else {
 			return Nette\Utils\Html::el('span')->setText($file . ($line ? ":$line" : ''));
 		}

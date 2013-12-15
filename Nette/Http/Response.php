@@ -143,7 +143,7 @@ class Response extends Nette\Object implements IResponse
 	{
 		$this->setCode($code);
 		$this->setHeader('Location', $url);
-		echo "<h1>Redirect</h1>\n\n<p><a href=\"" . htmlSpecialChars($url, ENT_IGNORE | ENT_QUOTES) . "\">Please click here to continue</a>.</p>";
+		echo "<h1>Redirect</h1>\n\n<p><a href=\"" . htmlSpecialChars($url, (defined('ENT_IGNORE') ? ENT_IGNORE : 0) | ENT_QUOTES) . "\">Please click here to continue</a>.</p>";
 	}
 
 
