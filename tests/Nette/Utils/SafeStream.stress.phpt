@@ -14,6 +14,11 @@ use Nette\Diagnostics\Debugger,
 require __DIR__ . '/../bootstrap.php';
 
 
+if (defined('HHVM_VERSION')) {
+	Assert::fail('HHVM and SafeStream are not friends yet.');
+}
+
+
 function randomStr()
 {
 	$s = str_repeat('LaTrine', rand(100, 20000));
