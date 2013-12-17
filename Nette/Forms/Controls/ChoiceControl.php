@@ -106,7 +106,7 @@ abstract class ChoiceControl extends BaseControl
 	 */
 	public function setItems(array $items, $useKeys = TRUE)
 	{
-		$this->items = $useKeys ? $items : array_combine($items, $items);
+		$this->items = Nette\Forms\Helpers::prepareChoiceItems($items, $useKeys);
 		return $this;
 	}
 

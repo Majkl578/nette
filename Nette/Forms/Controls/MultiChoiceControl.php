@@ -113,19 +113,7 @@ abstract class MultiChoiceControl extends BaseControl
 	 */
 	public function setItems(array $items, $useKeys = TRUE)
 	{
-		if ($useKeys) {
-			$this->items = $items;
-		} elseif (defined('HHVM_VERSION')) { // HHVM bug #1365
-			$this->items = array_combine(
-				array_map(function ($val) {
-					return is_object($val) ? (string) $val : $val;
-				}, $items),
-				$items
-			);
-		} else {
-			$this->items = array_combine($items, $items);
-		}
-
+		$this->items = Nette\Forms\Helpers::prepareChoiceItems($items, $useKeys);
 		return $this;
 	}
 

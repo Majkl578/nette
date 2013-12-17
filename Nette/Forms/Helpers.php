@@ -214,4 +214,27 @@ class Helpers extends Nette\Object
 		return array($dynamic, '<' . $name . Html::el(NULL, $attrs)->attributes());
 	}
 
+	/**
+	 * @param array
+	 * @param bool
+	 * @return array
+	 */
+	public static function prepareChoiceItems(array $items, $useKeys = TRUE)
+	{
+		if ($useKeys) {
+			return $items;
+		}
+
+		if (defined('HHVM_VERSION')) { // HHVM bug #1365
+			return array_combine(
+				array_map(function ($val) {
+					return is_object($val) ? (string) $val : $val;
+				}, $items),
+				$items
+			);
+		}
+
+		return array_combine($items, $items);
+	}
+
 }
