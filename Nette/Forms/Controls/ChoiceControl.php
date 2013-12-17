@@ -45,7 +45,8 @@ abstract class ChoiceControl extends BaseControl
 			if (is_array($this->disabled) && isset($this->disabled[$this->value])) {
 				$this->value = NULL;
 			} else {
-				$this->value = key(array($this->value => NULL));
+				$tmp = array($this->value => NULL); // HHVM bug #1366
+				$this->value = key($tmp);
 			}
 		}
 	}
@@ -61,7 +62,8 @@ abstract class ChoiceControl extends BaseControl
 		if ($value !== NULL && !isset($this->items[(string) $value])) {
 			throw new Nette\InvalidArgumentException("Value '$value' is out of allowed range in field '{$this->name}'.");
 		}
-		$this->value = $value === NULL ? NULL : key(array((string) $value => NULL));
+		$tmp = array((string) $value => NULL); // HHVM bug #1366
+		$this->value = $value === NULL ? NULL : key($tmp);
 		return $this;
 	}
 
