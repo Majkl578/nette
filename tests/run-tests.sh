@@ -55,7 +55,7 @@ else
 fi
 
 # Run tests with script's arguments, doubled -c option intentionally
-if [ $isHHVM ]; then
+if [ $isHHVM != 0 ]; then
 	$binary "$runnerScript" --hhvm -p $binary -j "$jobsNum" "$@"
 else
 	$binary -n -c "$phpIni" "$runnerScript" -j "$jobsNum" -c "$phpIni" "$@"
