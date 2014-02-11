@@ -9,10 +9,6 @@
 require __DIR__ . '/../bootstrap.php';
 
 
-if (defined('HHVM_VERSION')) {
-	Tester\Assert::fail('HHVM and SafeStream are not friends yet.');
-}
-
 
 Nette\Utils\SafeStream::register();
 
