@@ -180,7 +180,7 @@ class Validators extends Nette\Object
 	 */
 	public static function isCallable($value)
 	{
-		return $value && is_callable($value, TRUE);
+		return $value && (!is_array($value) || count($value) === 2) && is_callable($value, TRUE);
 	}
 
 
