@@ -377,7 +377,7 @@ class Template extends Nette\Object implements ITemplate
 		$res = '';
 		$blocks = array();
 		$tokens = token_get_all($source);
-		foreach ($tokens as $n => $token) {
+		foreach ((array) $tokens as $n => $token) {
 			if (is_array($token)) {
 				if ($token[0] === T_INLINE_HTML) {
 					$res .= $token[1];
